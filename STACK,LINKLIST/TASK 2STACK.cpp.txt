@@ -1,0 +1,163 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int roll, marks;
+    string name;
+    Node* next;
+};
+
+Node* head = NULL;
+
+void insert_begin() {
+    Node* temp = new Node();
+    cin >> temp->roll >> temp->name >> temp->marks;
+    temp->next = head;
+    head = temp;
+}
+
+void insert_end() {
+    Node* temp = new Node();
+    cin >> temp->roll >> temp->name >> temp->marks;
+    temp->next = NULL;
+
+    if (head == NULL) {
+        head = temp;
+        return;
+    }
+
+    Node* t = head;
+    while (t->next != NULL) t = t->next;
+    t->next = temp;
+}
+
+void insert_after() {
+    int r;
+    cin >> r;
+
+    Node* t = head;
+    while (t != NULL && t->roll != r) t = t->next;
+
+    if (t == NULL) {
+        cout << "Not Found\n";
+        return;
+    }
+
+    Node* temp = new Node();
+    cin >> temp->roll >> temp->name >> temp->marks;
+
+    temp->next = t->next;
+    t->next = temp;
+}
+
+void del() {
+    int r;
+    cin >> r;
+
+    if (head == NULL) {
+        cout << "Empty\n";
+        return;
+    }
+
+    if (head->roll == r) {
+        Node* t = head;
+        head = head->next;
+        delete t;
+        return;
+    }
+
+    Node* t = head;
+    while (t->next != NULL && t->next->roll != r) t = t->next;
+
+    if (t->next == NULL) {
+        cout << "Not Found\n";
+        return;
+    }
+
+    Node* d = t->next;
+    t->next = d->next;
+    delete d;
+}
+
+void display() {
+    Node* t = head;
+
+    if (t == NULL) {
+        cout << "Empty\n";
+        return;
+    }
+
+    while (t != NULL) {
+        cout << t->roll << " " << t->name << " " << t->marks << endl;
+        t = t->next;
+    }
+}
+
+void search() {
+    int r;
+    cin >> r;
+
+    Node* t = head;
+    while (t != NULL && t->roll != r) t = t->next;
+
+    if (t == NULL) cout << "Not Found\n";
+    else cout << t->roll << " " << t->name << " " << t->marks << endl;
+}
+
+void update() {
+    int r;
+    cin >> r;
+
+    Node* t = head;
+    while (t != NULL && t->roll != r) t = t->next;
+
+    if (t == NULL) {
+        cout << "Not Found\n";
+        return;
+    }
+
+    cin >> t->name >> t->marks;
+}
+
+void stats() {
+    if (head == NULL) {
+        cout << "Empty\n";
+        return;
+    }
+
+    Node* t = head;
+    int sum = 0, count = 0;
+    int mx = t->marks, mn = t->marks;
+
+    while (t != NULL) {
+        if (t->marks > mx) mx = t->marks;
+        if (t->marks < mn) mn = t->marks;
+        sum += t->marks;
+        count++;
+        t = t->next;
+    }
+
+    cout << "Max " << mx << endl;
+    cout << "Min " << mn << endl;
+    cout << "Avg " << sum / count << endl;
+}
+
+int main() {
+    int ch;
+
+    while (true) {
+        cin >> ch;
+
+        if (ch == 1) insert_begin();
+        else if (ch == 2) insert_end();
+        else if (ch == 3) insert_after();
+        else if (ch == 4) del();
+        else if (ch == 5) display();
+        else if (ch == 6) search();
+        else if (ch == 7) update();
+        else if (ch == 8) stats();
+        else if (ch == 9) break;
+    }
+
+    return 0;
+}
